@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  selector:
+    app: redis-cache
+  ports:
+    - protocol: TCP
+      port: 6379  # Service port
+      targetPort: 6379  # Container port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-cache
+  template:
+    metadata:
+      labels:
+        app: redis-cache
+    spec:
+      containers:
+        - name: redis-cache
+          image: redis:latest
+          ports:
+            - containerPort: 6379  # Default Redis port
